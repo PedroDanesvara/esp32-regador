@@ -38,7 +38,6 @@ def testar_api():
     # 1. Enviar dados dos sensores
     print("\n📊 Enviando dados dos sensores...")
     dados = {
-        "temperatura": round(random.uniform(20.0, 30.0), 1),
         "umidade_solo": random.randint(30, 80),
         "timestamp": int(time.time() * 1000),
         "device_id": device_id
@@ -47,7 +46,7 @@ def testar_api():
     try:
         response = requests.post(f"{api_url}/sensors", json=dados)
         if response.status_code == 201:
-            print(f"✅ Dados enviados: {dados['temperatura']}°C, {dados['umidade_solo']}%")
+            print(f"✅ Dados enviados: {dados['umidade_solo']}%")
         else:
             print(f"❌ Erro ao enviar dados: {response.status_code}")
     except Exception as e:

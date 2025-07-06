@@ -1,13 +1,12 @@
 # 🧪 Guia de Teste - Sistema ESP32 Monitoramento
 
-Este guia irá ajudá-lo a testar o sistema de monitoramento de temperatura e umidade do solo com ESP32.
+Este guia irá ajudá-lo a testar o sistema de monitoramento de umidade do solo com ESP32.
 
 ## 📋 Pré-requisitos
 
 ### Hardware
 - [ ] ESP32 (qualquer modelo)
 - [ ] Sensor de Umidade do Solo Capacitivo v2.0
-- [ ] Sensor de Temperatura DS18B20 (opcional)
 - [ ] Protoboard e jumpers
 - [ ] Cabo USB
 
@@ -22,8 +21,6 @@ Este guia irá ajudá-lo a testar o sistema de monitoramento de temperatura e um
 2. Vá em **Sketch > Include Library > Manage Libraries**
 3. Instale as seguintes bibliotecas:
    - **ArduinoJson** (versão 6.x)
-   - **OneWire**
-   - **DallasTemperature**
 
 ## 🔌 Passo 2: Conexões Físicas
 
@@ -33,15 +30,6 @@ ESP32          Sensor v2.0
 3.3V    →      VCC
 GND     →      GND
 GPIO 36 →      AOUT
-```
-
-### Sensor de Temperatura (opcional)
-```
-ESP32          DS18B20
-3.3V    →      VCC
-GND     →      GND
-GPIO 4  →      DATA
-4.7kΩ   →      Resistor pull-up (DATA ↔ VCC)
 ```
 
 ## ⚙️ Passo 3: Configuração do Código
@@ -78,14 +66,12 @@ GPIO 4  →      DATA
    Sistema inicializado com sucesso!
    === Medindo sensores ===
    Valor Raw do Sensor: 2500
-   Temperatura: 25.5 °C
    Umidade do Solo: 65%
    ========================
    ```
 
 ### 4.3 Verificação dos Sensores
 - **LED**: Deve acender quando WiFi conectar
-- **Temperatura**: Deve mostrar valores entre -40°C e +125°C
 - **Umidade**: Deve mostrar valores entre 0% e 100%
 
 ## 🌐 Passo 5: Teste com API
@@ -115,7 +101,7 @@ GPIO 4  →      DATA
 No Monitor Serial, você deve ver:
 ```
 Enviando dados para API:
-{"temperatura":25.5,"umidade_solo":65,"timestamp":1234567890,"device_id":"ESP32_001"}
+{"umidade_solo":65,"timestamp":1234567890,"device_id":"ESP32_001"}
 Resposta da API (código 200):
 {"status":"success","message":"Data received"}
 ```
@@ -165,26 +151,17 @@ Resposta da API (código 200):
 2. Teste a API separadamente
 3. Verifique se o ESP32 tem acesso à internet
 
-### Problema: Sensor de temperatura não funciona
-**Sintomas**: Temperatura = -999
-**Soluções**:
-1. Verifique as conexões do DS18B20
-2. Verifique o resistor pull-up
-3. Teste com multímetro
-
 ## 📊 Verificação Final
 
 ### Checklist de Teste
 - [ ] ESP32 conecta ao WiFi
 - [ ] LED acende quando conectado
 - [ ] Sensor de umidade mostra valores variados
-- [ ] Sensor de temperatura mostra valores realistas
 - [ ] Dados são enviados para API
 - [ ] API responde com sucesso
 - [ ] Medições ocorrem a cada 30 segundos
 
 ### Valores Esperados
-- **Temperatura**: 15°C - 40°C (ambiente)
 - **Umidade do Solo**: 0% - 100% (depende do solo)
 - **Intervalo**: 30 segundos entre medições
 - **Formato JSON**: Estrutura correta

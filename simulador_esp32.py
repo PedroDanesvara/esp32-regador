@@ -28,22 +28,17 @@ class ESP32Simulator:
         self.pump_start_time = None
         
         # Valores base para simulação
-        self.base_temperature = 25.0
         self.base_humidity = 60
-        self.temperature_variation = 5.0
         self.humidity_variation = 20
         
     def gerar_dados_sensores(self):
-        """Gera dados simulados de temperatura e umidade"""
+        """Gera dados simulados de umidade"""
         # Simular variação gradual
-        temp_variation = random.uniform(-self.temperature_variation, self.temperature_variation)
         humidity_variation = random.uniform(-self.humidity_variation, self.humidity_variation)
         
-        temperatura = round(self.base_temperature + temp_variation, 1)
         umidade_solo = max(0, min(100, int(self.base_humidity + humidity_variation)))
         
         return {
-            "temperatura": temperatura,
             "umidade_solo": umidade_solo,
             "timestamp": int(time.time() * 1000),
             "device_id": self.device_id
@@ -173,7 +168,7 @@ class ESP32Simulator:
             
             # 1. Enviar dados dos sensores
             dados = self.gerar_dados_sensores()
-            print(f"📊 Sensores: {dados['temperatura']}°C, {dados['umidade_solo']}% umidade")
+            print(f"📊 Sensores: {dados['umidade_solo']}% umidade")
             
             response = self.enviar_dados_sensores(dados)
             if response and response.status_code == 201:

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Script para testar a API do sistema de monitoramento ESP32
-Simula dados de temperatura e umidade do solo
+Simula dados de umidade do solo
 """
 
 import requests
@@ -23,7 +23,6 @@ class APITester:
     def gerar_dados_simulados(self):
         """Gera dados simulados do ESP32"""
         return {
-            "temperatura": round(random.uniform(18.0, 35.0), 1),
             "umidade_solo": random.randint(20, 90),
             "timestamp": int(time.time() * 1000),
             "device_id": "ESP32_001"

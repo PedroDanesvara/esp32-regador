@@ -78,7 +78,7 @@ A simulação controla a bomba automaticamente baseado na umidade do solo:
 - Os dados devem aparecer automaticamente
 
 ### 2. Monitorar Dados
-- Temperatura e umidade atualizam a cada 5 segundos
+- Umidade atualiza a cada 5 segundos
 - Status da bomba atualiza em tempo real
 - Histórico é mantido no banco de dados
 
@@ -106,14 +106,10 @@ if ciclo % 5 == 0:
 
 ### Alterar Valores Base
 ```python
-# Temperatura base
-self.base_temperature = 25.0
-
 # Umidade base
 self.base_humidity = 60
 
 # Variações
-self.temperature_variation = 5.0
 self.humidity_variation = 20
 ```
 

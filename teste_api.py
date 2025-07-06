@@ -38,7 +38,6 @@ def testar_api(api_url):
             elif method == "POST":
                 # Dados de teste para POST
                 test_data = {
-                    "temperatura": 25.5,
                     "umidade_solo": 65,
                     "timestamp": 1234567890,
                     "device_id": "ESP32_001"

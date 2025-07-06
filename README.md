@@ -1,10 +1,9 @@
 # ESP32 - Sistema de Monitoramento IoT
 
 ## Descrição
-Código para ESP32 que monitora temperatura e umidade do solo, enviando dados para a API via HTTP. Inclui simulador Python para testes.
+Código para ESP32 que monitora umidade do solo, enviando dados para a API via HTTP. Inclui simulador Python para testes.
 
 ## Funcionalidades
-- Leitura de sensores DHT22 (temperatura e umidade)
 - Leitura de sensor de umidade do solo
 - Envio de dados para API via HTTP
 - Controle de bomba de água
@@ -13,22 +12,16 @@ Código para ESP32 que monitora temperatura e umidade do solo, enviando dados pa
 
 ## Hardware Necessário
 - ESP32
-- Sensor DHT22 (temperatura e umidade)
 - Sensor de umidade do solo
 - Relé para controle da bomba
 - Módulo WiFi (integrado no ESP32)
 
 ## Pinagem
 ```
-DHT22:
-- VCC -> 3.3V
-- GND -> GND
-- DATA -> GPIO4
-
 Sensor de Umidade do Solo:
 - VCC -> 3.3V
 - GND -> GND
-- DATA -> GPIO5
+- DATA -> GPIO36 (ADC)
 
 Relé da Bomba:
 - VCC -> 3.3V
@@ -39,7 +32,6 @@ Relé da Bomba:
 ## Configuração
 
 1. Instale as bibliotecas necessárias no Arduino IDE:
-   - DHT sensor library
    - WiFi library (incluída)
    - HTTPClient library (incluída)
    - ArduinoJson
@@ -82,7 +74,6 @@ esp32/
 Os dados são enviados no formato JSON:
 ```json
 {
-  "temperatura": 25.5,
   "umidade_solo": 65,
   "timestamp": 1234567890,
   "device_id": "ESP32_001"
@@ -104,7 +95,7 @@ python simulador_esp32.py
 ```
 
 O simulador irá:
-- Gerar dados aleatórios de temperatura e umidade
+- Gerar dados aleatórios de umidade
 - Enviar dados para a API
 - Simular o comportamento do ESP32
 

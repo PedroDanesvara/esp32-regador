@@ -1,8 +1,6 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
-#include <OneWire.h>
-#include <DallasTemperature.h>
 
 // Configurações WiFi
 const char* ssid = "SUA_REDE_WIFI";
@@ -14,15 +12,9 @@ const int apiPort = 80;
 
 // Pinos do ESP32
 #define SOIL_MOISTURE_PIN 36  // Pino ADC para o sensor de umidade do solo
-#define TEMP_SENSOR_PIN 4     // Pino para o sensor de temperatura DS18B20
 #define LED_PIN 2             // LED para indicar status
 
-// Configurações do sensor de temperatura
-OneWire oneWire(TEMP_SENSOR_PIN);
-DallasTemperature sensors(&oneWire);
-
 // Variáveis globais
-float temperatura = 0.0;
 int umidadeSolo = 0;
 unsigned long ultimaMedicao = 0;
 const unsigned long intervaloMedicao = 30000; // 30 segundos
@@ -36,9 +28,6 @@ void setup() {
   pinMode(LED_PIN, OUTPUT);
   
   Serial.println("Iniciando sistema de monitoramento...");
-  
-  // Inicializar sensor de temperatura
-  sensors.begin();
   
   // Conectar ao WiFi
   conectarWiFi();
@@ -92,31 +81,14 @@ void conectarWiFi() {
 void medirSensores() {
   Serial.println("=== Medindo sensores ===");
   
-  // Medir temperatura
-  medirTemperatura();
-  
   // Medir umidade do solo
   medirUmidadeSolo();
   
   // Exibir resultados
-  Serial.print("Temperatura: ");
-  Serial.print(temperatura);
-  Serial.println(" °C");
-  
   Serial.print("Umidade do Solo: ");
   Serial.print(umidadeSolo);
   Serial.println("%");
   Serial.println("========================");
-}
-
-void medirTemperatura() {
-  sensors.requestTemperatures();
-  temperatura = sensors.getTempCByIndex(0);
-  
-  if (temperatura == DEVICE_DISCONNECTED_C) {
-    Serial.println("Erro: Sensor de temperatura não encontrado!");
-    temperatura = -999; // Valor de erro
-  }
 }
 
 void medirUmidadeSolo() {
@@ -145,7 +117,6 @@ void enviarDadosAPI() {
   
   // Criar JSON com os dados
   StaticJsonDocument<200> doc;
-  doc["temperatura"] = temperatura;
   doc["umidade_solo"] = umidadeSolo;
   doc["timestamp"] = millis();
   doc["device_id"] = "ESP32_001"; // Identificador único do dispositivo
