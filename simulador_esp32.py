@@ -264,8 +264,8 @@ def main():
     # Tentar diferentes endpoints para verificar conectividade
     endpoints_to_test = [
         f"{api_url}/sensors",  # Endpoint principal
-        f"{api_url.replace('/api', '')}/health",  # Endpoint de saúde (se existir)
-        f"{api_url.replace('/api', '')}/"  # Endpoint raiz
+        f"{api_url}/health",  # Endpoint de saúde (se existir)
+        f"{api_url.rsplit('/api', 1)[0]}/"  # Endpoint raiz (remove apenas a última ocorrência de /api)r
     ]
     
     api_available = False
