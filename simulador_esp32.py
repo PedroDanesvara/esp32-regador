@@ -13,7 +13,7 @@ from datetime import datetime
 import threading
 
 class ESP32Simulator:
-    def __init__(self, api_base_url="http://localhost:3000/api"):
+    def __init__(self, api_base_url="https://api-regador.vercel.app/api"):
         self.api_base_url = api_base_url
         self.session = requests.Session()
         self.session.headers.update({
@@ -236,13 +236,13 @@ def main():
     print("=" * 60)
     
     # Configurações
-    api_url = input("URL da API (padrão: http://localhost:3000/api): ").strip()
+    api_url = input("URL da API (padrão: https://api-regador.vercel.app/api): ").strip()
     if not api_url:
-        api_url = "http://localhost:3000/api"
+        api_url = "https://api-regador.vercel.app/api"
     
-    device_id = input("Device ID (padrão: ESP32_002): ").strip()
+    device_id = input("Device ID (padrão: ESP32_001): ").strip()
     if not device_id:
-        device_id = "ESP32_002"
+        device_id = "ESP32_001"
     
     try:
         duracao = int(input("Duração em minutos (padrão: 10): ") or "10")
