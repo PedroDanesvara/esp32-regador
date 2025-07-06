@@ -54,6 +54,13 @@ class ESP32Simulator:
         try:
             response = self.session.post(f"{self.api_base_url}/sensors", json=dados)
             return response
+        except requests.exceptions.ConnectionError as e:
+            print(f"❌ Erro de conexão ao enviar dados dos sensores: {e}")
+            print(f"   Verifique se a API está online: {self.api_base_url}")
+            return None
+        except requests.exceptions.Timeout as e:
+            print(f"❌ Timeout ao enviar dados dos sensores: {e}")
+            return None
         except requests.exceptions.RequestException as e:
             print(f"❌ Erro ao enviar dados dos sensores: {e}")
             return None
@@ -252,16 +259,42 @@ def main():
     print(f"   Duração: {duracao} minutos")
     
     # Verificar se API está disponível
-    try:
-        health_response = requests.get(f"{api_url.replace('/api', '')}/health", timeout=5)
-        if health_response.status_code == 200:
-            print("✅ API está disponível")
-        else:
-            print("⚠️  API pode não estar funcionando corretamente")
-    except:
+    print("🔍 Verificando conectividade com a API...")
+    
+    # Tentar diferentes endpoints para verificar conectividade
+    endpoints_to_test = [
+        f"{api_url}/sensors",  # Endpoint principal
+        f"{api_url.replace('/api', '')}/health",  # Endpoint de saúde (se existir)
+        f"{api_url.replace('/api', '')}/"  # Endpoint raiz
+    ]
+    
+    api_available = False
+    for endpoint in endpoints_to_test:
+        try:
+            print(f"   Testando: {endpoint}")
+            response = requests.get(endpoint, timeout=10)
+            if response.status_code in [200, 201, 404]:  # 404 também indica que a API está respondendo
+                print(f"✅ API está respondendo (status: {response.status_code})")
+                api_available = True
+                break
+        except requests.exceptions.RequestException as e:
+            print(f"   ❌ Falha: {e}")
+            continue
+    
+    if not api_available:
         print("❌ Não foi possível conectar à API")
-        print("   Certifique-se de que o servidor está rodando: npm run dev")
-        return
+        print("   Verifique:")
+        print("   - Se a URL está correta")
+        print("   - Se a API está online no Vercel")
+        print("   - Se há problemas de rede")
+        print("   - Se o endpoint /api está correto")
+        
+        # Perguntar se quer continuar mesmo assim
+        continuar = input("\nDeseja continuar mesmo assim? (s/N): ").strip().lower()
+        if continuar not in ['s', 'sim', 'y', 'yes']:
+            return
+        else:
+            print("⚠️  Continuando com verificação de conectividade desabilitada...")
     
     # Iniciar simulação
     try:
